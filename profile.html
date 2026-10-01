@@ -1,1 +1,94 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#172554"><link rel="stylesheet" href="styles.css"><title>الملف الشخصي | UOB Student Hub</title></head><body><header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">U</span><span><strong>UOB Student Hub</strong><small>منصة طلابية مستقلة</small></span></a><div class="header-actions" style="margin-inline-start:auto"><button class="lang-btn" data-lang-toggle>EN</button><a class="profile-link" href="profile.html">الملف الشخصي</a><a class="outline-btn" href="index.html">الرئيسية</a></div></header><main class="auth-shell"><div class="profile-layout"><aside class="profile-summary"><div class="avatar" id="avatar">MK</div><h2 id="displayName">طالب جامعة البحرين</h2><p id="displayMajor">لم يتم تحديد التخصص</p><a class="back-link" href="index.html">العودة إلى الرئيسية</a></aside><section class="profile-form"><span class="eyebrow">UOB Student Hub</span><h1>بياناتي الشخصية</h1><form id="profileForm"><div class="form-grid"><label>الاسم الكامل<input id="fullName" required></label><label>الرقم الجامعي<input id="studentId" inputmode="numeric"></label><label>البريد الإلكتروني<input id="profileEmail" type="email"></label><label>الكلية<select id="college"><option>كلية تقنية المعلومات</option><option>كلية إدارة الأعمال</option><option>كلية الهندسة</option><option>كلية العلوم</option><option>كلية الآداب</option><option>كلية الحقوق</option></select></label><label>التخصص<input id="major"></label><label>السنة الدراسية<select id="year"><option>الأولى</option><option>الثانية</option><option>الثالثة</option><option>الرابعة</option><option>دراسات عليا</option></select></label></div><div class="profile-actions"><button class="primary-btn" type="submit">حفظ التغييرات</button><button class="outline-btn" id="logout" type="button">تسجيل الخروج</button></div><p class="auth-message" id="message"></p></form></section></div></main><script src="i18n.js"></script><script>const p=JSON.parse(localStorage.getItem('uobProfile')||'{}'),u=JSON.parse(localStorage.getItem('uobUser')||'{}');fullName.value=p.fullName||'';studentId.value=p.studentId||'';profileEmail.value=p.email||u.email||'';major.value=p.major||'';if(p.college)college.value=p.college;if(p.year)year.value=p.year;function show(){displayName.textContent=fullName.value||'طالب جامعة البحرين';displayMajor.textContent=major.value||'لم يتم تحديد التخصص';avatar.textContent=(fullName.value.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('')||'MK').toUpperCase()}show();profileForm.onsubmit=e=>{e.preventDefault();localStorage.setItem('uobProfile',JSON.stringify({fullName:fullName.value,studentId:studentId.value,email:profileEmail.value,college:college.value,major:major.value,year:year.value}));show();message.textContent=localStorage.getItem('uobLang')==='en'?'Your details were saved successfully':'تم حفظ بياناتك بنجاح'};logout.onclick=()=>{localStorage.removeItem('uobUser');location.href='login.html'}</script></body></html>
+https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
+supabase.jsscript>
+
+<script>
+(async () => {
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+  profileEmail.value = user.email;
+
+  const { data } =
+    await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if (data) {
+    fullName.value = data.full_name || "";
+    studentId.value = data.student_id || "";
+    major.value = data.major || "";
+
+    if (data.college)
+      college.value = data.college;
+
+    if (data.study_year)
+      year.value = data.study_year;
+  }
+
+  updatePreview();
+
+  profileForm.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const { error } =
+      await supabaseClient
+      .from("profiles")
+      .upsert({
+        id: user.id,
+        full_name: fullName.value,
+        student_id: studentId.value,
+        college: college.value,
+        major: major.value,
+        study_year: year.value
+      });
+
+    if (error) {
+      message.textContent = error.message;
+      return;
+    }
+
+    updatePreview();
+    message.textContent =
+      "تم حفظ البيانات بنجاح";
+  };
+
+})();
+
+function updatePreview() {
+
+  displayName.textContent =
+    fullName.value ||
+    "طالب جامعة البحرين";
+
+  displayMajor.textContent =
+    major.value ||
+    "لم يتم تحديد التخصص";
+
+  avatar.textContent =
+  (
+    fullName.value
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x=>x[0])
+    .join("")
+    || "U"
+  ).toUpperCase();
+}
+
+logout.onclick = async () => {
+
+  await supabaseClient.auth.signOut();
+
+  location.href = "login.html";
+};
+</script>
