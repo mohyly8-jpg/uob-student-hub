@@ -1,11 +1,11 @@
 const SUPABASE_URL =
-  "https://zsapwppbrxqcourctqts.supabase.co";
+"https://zsapwppbrxqcourctqts.supabase.co";
 
 const SUPABASE_KEY =
-  "ضع هنا المفتاح الجديد بعد عمل Rotate";
+"sb_publishable_ILxNdjGXvy21klnQsHJ8JA_rCZtDxs7";
 
 const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
