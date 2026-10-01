@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#172554">
   <link rel="stylesheet" href="styles.css">
+
   <title>تسجيل الدخول | UOB Student Hub</title>
 </head>
 
@@ -25,6 +27,7 @@
 </header>
 
 <main class="auth-shell">
+
   <section class="auth-card">
 
     <span class="eyebrow">UOB Student Hub</span>
@@ -39,6 +42,7 @@
 
       <label>
         البريد الإلكتروني
+
         <input
           id="email"
           type="email"
@@ -48,6 +52,7 @@
 
       <label>
         كلمة المرور
+
         <input
           id="password"
           type="password"
@@ -56,17 +61,29 @@
           placeholder="••••••••">
       </label>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px">
+      <div
+        style="
+          display:flex;
+          gap:10px;
+          margin-top:15px;
+          flex-wrap:wrap;
+        ">
 
-        <button class="primary-btn" type="submit">
+        <button
+          class="primary-btn"
+          type="submit">
+
           تسجيل الدخول
+
         </button>
 
         <button
           id="registerBtn"
           class="outline-btn"
           type="button">
+
           إنشاء حساب
+
         </button>
 
       </div>
@@ -79,14 +96,20 @@
 
     </form>
 
-    <a class="back-link" href="index.html">
+    <a
+      class="back-link"
+      href="index.html">
+
       العودة إلى الرئيسية
+
     </a>
 
   </section>
+
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
+
 supabase.jsscript>
 
 <script>
@@ -98,7 +121,10 @@ supabase.jsscript>
   } = await supabaseClient.auth.getSession();
 
   if (session) {
-    location.href = "profile.html";
+
+    location.href =
+      "profile.html";
+
   }
 
 })();
@@ -106,88 +132,93 @@ supabase.jsscript>
 const form =
 document.getElementById("loginForm");
 
-const message =
-document.getElementById("message");
-
 const registerBtn =
 document.getElementById("registerBtn");
 
+const message =
+document.getElementById("message");
+
 form.addEventListener(
-  "submit",
-  async (e) => {
+"submit",
+async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    const email =
-      document.getElementById("email").value;
+  const email =
+  document.getElementById("email").value;
 
-    const password =
-      document.getElementById("password").value;
+  const password =
+  document.getElementById("password").value;
 
-    message.textContent =
-      "جاري تسجيل الدخول...";
+  message.textContent =
+  "جاري تسجيل الدخول...";
 
-    const { error } =
-      await supabaseClient.auth
-      .signInWithPassword({
-        email,
-        password
-      });
+  const { error } =
+  await supabaseClient.auth
+  .signInWithPassword({
 
-    if (error) {
+    email,
+    password
 
-      message.textContent =
-        error.message;
+  });
 
-      return;
-    }
+  if (error) {
 
     message.textContent =
-      "تم تسجيل الدخول";
+    error.message;
 
-    location.href =
-      "profile.html";
-
+    return;
   }
-);
+
+  message.textContent =
+  "تم تسجيل الدخول بنجاح";
+
+  location.href =
+  "profile.html";
+
+});
 
 registerBtn.addEventListener(
-  "click",
-  async () => {
+"click",
+async () => {
 
-    const email =
-      document.getElementById("email").value;
+  const email =
+  document.getElementById("email").value;
 
-    const password =
-      document.getElementById("password").value;
+  const password =
+  document.getElementById("password").value;
 
-    if (!email || !password) {
-
-      message.textContent =
-        "أدخل البريد الإلكتروني وكلمة المرور أولاً";
-
-      return;
-    }
-
-    const { error } =
-      await supabaseClient.auth.signUp({
-        email,
-        password
-      });
-
-    if (error) {
-
-      message.textContent =
-        error.message;
-
-      return;
-    }
+  if (!email || !password) {
 
     message.textContent =
-      "تم إنشاء الحساب. تحقق من بريدك الإلكتروني إن طُلب منك ذلك.";
+    "أدخل البريد الإلكتروني وكلمة المرور أولاً";
 
+    return;
   }
-);
+
+  message.textContent =
+  "جاري إنشاء الحساب...";
+
+  const { error } =
+  await supabaseClient.auth.signUp({
+
+    email,
+    password
+
+  });
+
+  if (error) {
+
+    message.textContent =
+    error.message;
+
+    return;
+  }
+
+  message.textContent =
+  "تم إنشاء الحساب بنجاح";
+
+});
 
 </script>
 
