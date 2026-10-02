@@ -1,0 +1,16 @@
+create extension if not exists pgcrypto;
+create table if not exists public.profiles (id uuid primary key references auth.users(id) on delete cascade, full_name text, student_id text unique, college text, major text, academic_year text, created_at timestamptz default now(), updated_at timestamptz default now());
+create table if not exists public.tasks (id uuid primary key default gen_random_uuid(), user_id uuid not null references auth.users(id) on delete cascade, course_code text, title text not null, task_type text not null default 'study', due_date date not null, priority int default 2 check(priority between 1 and 3), status text default 'pending', created_at timestamptz default now());
+create table if not exists public.gpa_records (id uuid primary key default gen_random_uuid(), user_id uuid not null references auth.users(id) on delete cascade, semester text, gpa numeric(3,2) check(gpa between 0 and 4), created_at timestamptz default now());
+create table if not exists public.resources (id uuid primary key default gen_random_uuid(), course_code text not null, title text not null, category text default 'مرجع', file_url text not null, uploaded_by uuid references auth.users(id) on delete set null, created_at timestamptz default now());
+alter table public.profiles enable row level security;alter table public.tasks enable row level security;alter table public.gpa_records enable row level security;alter table public.resources enable row level security;
+drop policy if exists "profiles own select" on public.profiles; create policy "profiles own select" on public.profiles for select using(auth.uid()=id);
+drop policy if exists "profiles own insert" on public.profiles; create policy "profiles own insert" on public.profiles for insert with check(auth.uid()=id);
+drop policy if exists "profiles own update" on public.profiles; create policy "profiles own update" on public.profiles for update using(auth.uid()=id) with check(auth.uid()=id);
+drop policy if exists "tasks own all" on public.tasks; create policy "tasks own all" on public.tasks for all using(auth.uid()=user_id) with check(auth.uid()=user_id);
+drop policy if exists "gpa own all" on public.gpa_records; create policy "gpa own all" on public.gpa_records for all using(auth.uid()=user_id) with check(auth.uid()=user_id);
+drop policy if exists "resources public read" on public.resources; create policy "resources public read" on public.resources for select using(true);
+drop policy if exists "resources auth insert" on public.resources; create policy "resources auth insert" on public.resources for insert to authenticated with check(auth.uid()=uploaded_by);
+insert into storage.buckets(id,name,public) values('resources','resources',true) on conflict(id) do update set public=true;
+drop policy if exists "resource files public read" on storage.objects; create policy "resource files public read" on storage.objects for select using(bucket_id='resources');
+drop policy if exists "resource files auth upload" on storage.objects; create policy "resource files auth upload" on storage.objects for insert to authenticated with check(bucket_id='resources' and (storage.foldername(name))[1]=auth.uid()::text);
