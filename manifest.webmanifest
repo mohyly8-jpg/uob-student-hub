@@ -1,18 +1,1 @@
-{
-  "name": "UOB Student Hub",
-  "short_name": "UOB Hub",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#f7faff",
-  "theme_color": "#172554",
-  "lang": "ar",
-  "dir": "rtl",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
-  ]
-}
+{"name":"UOB Student Hub","short_name":"UOB Hub","start_url":"./index.html","display":"standalone","background_color":"#f8fafc","theme_color":"#172554","lang":"ar","dir":"rtl","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}

@@ -3,3 +3,4 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://zsapwppbrxqcourctqts.supabase.co wss://zsapwppbrxqcourctqts.supabase.co; img-src 'self' data: https:; frame-ancestors 'none'
