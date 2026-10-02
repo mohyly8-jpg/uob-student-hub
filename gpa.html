@@ -1,1 +1,18 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"><title>GPA</title></head><body><h1>حاسبة المعدل</h1></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حاسبة المعدل | UOB Student Hub</title><meta name="description" content="احسب معدلك الفصلي واحفظ سجلاتك.">
+<meta property="og:title" content="حاسبة المعدل | UOB Student Hub"><meta property="og:description" content="احسب معدلك الفصلي واحفظ سجلاتك."><meta name="theme-color" content="#172554">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body><main class="content" id="main"><h1>حاسبة المعدل</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+<section class="card"><table><thead><tr><th>المادة</th><th>الساعات</th><th>الدرجة</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+<button type="button" class="btn ghost" id="add" style="margin-top:12px">+ إضافة مادة</button></section>
+<section class="card stat"><h2>المعدل الفصلي</h2><b id="gpa" style="font-size:3rem" aria-live="polite">0.00</b><p class="muted"><span id="credits">0</span> ساعة معتمدة</p>
+<label for="term">اسم الفصل</label><input id="term" placeholder="الفصل الأول 2026"><button type="button" class="btn" id="save" style="margin-top:12px">حفظ السجل</button></section></div>
+<section class="card" style="margin-top:16px"><h2>السجلات المحفوظة</h2><div id="hist"></div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script><script src="js/main.js"></script><script src="js/gpa.js"></script></body></html>

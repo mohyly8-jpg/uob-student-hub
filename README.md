@@ -1,28 +1,5 @@
 # UOB Student Hub
-
-نموذج واجهة عربية متجاوبة لمنصة طلابية مستقلة مع جدول دراسي ذكي.
-
-## التشغيل
-افتح ملف `index.html` في أي متصفح حديث. لا يحتاج إلى خادم أو تثبيت.
-
-## الملفات
-- `index.html`: هيكل الموقع ومحتواه.
-- `styles.css`: التصميم المتجاوب ودعم RTL والطباعة.
-- `app.js`: إضافة المهام، حفظها محليًا، وترتيب الخطة الأسبوعية.
-
-## ملاحظات
-- الجدولة الحالية خوارزمية محلية تعتمد على قرب الموعد، الصعوبة، ونوع المهمة.
-- البيانات تحفظ في LocalStorage داخل المتصفح.
-- النموذج مستقل وغير مرتبط بأنظمة جامعة البحرين الرسمية.
-
-- `login.html`: صفحة تسجيل الدخول التجريبية.
-- `profile.html`: الملف الشخصي القابل للحفظ محليًا.
-- `i18n.js`: تبديل العربية والإنجليزية واتجاه RTL/LTR.
-
-> تسجيل الدخول في هذه النسخة تجريبي ويستخدم LocalStorage، وليس نظام مصادقة إنتاجيًا.
-
-## إضافات v3
-- لوحة تحكم للطالب وإحصاءات محلية.
-- صفحة مصادر مع بحث.
-- PWA قابلة للتثبيت والعمل دون اتصال بعد الزيارة الأولى.
-- ملف 404 ورؤوس حماية وSEO أساسي.
+1. Run `supabase/schema.sql` in the Supabase SQL Editor (creates tables, RLS, profile trigger, private `resources` bucket).
+2. Put your **anon** key in `supabase.js` (URL is already set to your project).
+3. Auth → URL Configuration: add your site URL + `/login.html` to Redirect URLs. Keep "Confirm email" on.
+4. Serve statically (`npx serve .`) and open index.html.

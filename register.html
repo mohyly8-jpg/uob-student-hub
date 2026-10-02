@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إنشاء حساب | UOB Student Hub</title><meta name="description" content="أنشئ حسابك في UOB Student Hub.">
+<meta property="og:title" content="إنشاء حساب | UOB Student Hub"><meta property="og:description" content="أنشئ حسابك في UOB Student Hub."><meta name="theme-color" content="#172554">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/auth.css">
+</head>
+<body><main class="auth"><div class="card"><h1>إنشاء حساب</h1>
+<form id="register-form"><label for="name">الاسم الكامل</label><input id="name" required autocomplete="name">
+<label for="email">البريد الإلكتروني</label><input id="email" type="email" required dir="ltr">
+<label for="password">كلمة المرور</label><input id="password" type="password" minlength="8" required autocomplete="new-password" dir="ltr">
+<label for="confirm">تأكيد كلمة المرور</label><input id="confirm" type="password" required autocomplete="new-password" dir="ltr">
+<button class="btn" type="submit">إنشاء الحساب</button><div id="msg" role="alert"></div></form>
+<p style="text-align:center;margin-top:16px">لديك حساب؟ <a href="login.html">تسجيل الدخول</a></p></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script><script src="js/main.js"></script><script src="js/auth.js"></script></body></html>

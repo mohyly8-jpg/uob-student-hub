@@ -1,1 +1,21 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"><title>Dashboard</title></head><body><h1>لوحة التحكم</h1><div class="card">المهام</div></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة التحكم | UOB Student Hub</title><meta name="description" content="ملخص مهامك ومعدلك ومواعيدك.">
+<meta property="og:title" content="لوحة التحكم | UOB Student Hub"><meta property="og:description" content="ملخص مهامك ومعدلك ومواعيدك."><meta name="theme-color" content="#172554">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body><main class="content" id="main"><h1 id="hi">أهلاً بك</h1>
+<div class="grid"><div class="card stat"><b id="s1">0</b>مهام قادمة</div><div class="card stat"><b id="s2">0</b>مهام منجزة</div><div class="card stat"><b id="s3">0</b>اختبارات قادمة</div><div class="card stat"><b id="s4">—</b>آخر معدل</div></div>
+<div class="grid" style="margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><section class="card"><h2>المهام القادمة</h2><div id="up"></div></section><section class="card"><h2>🔔 تذكيرات (خلال 3 أيام)</h2><div id="rem"></div></section></div></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script><script src="js/main.js"></script><script>(async()=>{const u=await initApp('dashboard','لوحة التحكم');if(!u)return;
+const [p,t,g]=await Promise.all([sb.from('profiles').select('full_name').eq('id',u.id).maybeSingle(),sb.from('tasks').select('*').order('due_date'),sb.from('gpa_records').select('gpa').order('created_at',{ascending:false}).limit(1)]);
+$('#hi').textContent='أهلاً، '+(p.data?.full_name||u.email);const all=t.data||[],open=all.filter(x=>!x.done),today=new Date().toISOString().slice(0,10),lim=new Date(Date.now()+3*864e5).toISOString().slice(0,10);
+$('#s1').textContent=open.length;$('#s2').textContent=all.length-open.length;$('#s3').textContent=open.filter(x=>x.type==='exam').length;$('#s4').textContent=g.data?.[0]?.gpa??'—';
+const li=x=>'<div class="item"><span>'+esc(x.title)+'</span><small class="muted">'+x.due_date+'</small></div>';
+$('#up').innerHTML=open.slice(0,6).map(li).join('')||'<p class="muted">لا مهام</p>';
+$('#rem').innerHTML=open.filter(x=>x.due_date<=lim).map(li).join('')||'<p class="muted">لا تذكيرات</p>'})()</script></body></html>

@@ -1,1 +1,30 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"><title>Resources</title></head><body><h1>المصادر</h1></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مكتبة المصادر | UOB Student Hub</title><meta name="description" content="ابحث وحمّل وشارك الملخصات الدراسية.">
+<meta property="og:title" content="مكتبة المصادر | UOB Student Hub"><meta property="og:description" content="ابحث وحمّل وشارك الملخصات الدراسية."><meta name="theme-color" content="#172554">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body><main class="content" id="main"><h1>مكتبة المصادر</h1>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+<form id="rform" class="card"><h2>رفع ملف PDF</h2><label for="rt">العنوان</label><input id="rt" required><label for="rc">رمز المادة</label><input id="rc" required placeholder="ITCS101" dir="ltr">
+<label for="rk">التصنيف</label><select id="rk"><option>ملخصات</option><option>اختبارات سابقة</option><option>محاضرات</option><option>أخرى</option></select>
+<label for="rf">الملف (PDF، حتى 10MB)</label><input id="rf" type="file" accept="application/pdf" required><button class="btn" style="margin-top:12px">رفع</button></form>
+<section class="card"><label for="q">بحث عن مادة</label><input id="q" type="search" placeholder="اسم أو رمز المادة"><label for="cat">التصنيف</label><select id="cat"><option value="">الكل</option><option>ملخصات</option><option>اختبارات سابقة</option><option>محاضرات</option><option>أخرى</option></select></section></div>
+<section class="card" style="margin-top:16px"><div id="list" aria-live="polite"></div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script><script src="js/main.js"></script><script>(async()=>{const u=await initApp('resources','مكتبة المصادر');if(!u)return;let all=[];
+const draw=()=>{const q=$('#q').value.trim().toLowerCase(),c=$('#cat').value;
+$('#list').innerHTML=all.filter(r=>(!c||r.category===c)&&(r.title+r.course).toLowerCase().includes(q)).map(r=>'<div class="item"><span><b>'+esc(r.title)+'</b> <span class="badge">'+esc(r.course)+'</span> <span class="badge">'+esc(r.category)+'</span></span><span><button class="btn sm" data-p="'+esc(r.file_path)+'">تحميل</button> '+(r.user_id===u.id?'<button class="btn danger sm" data-x="'+r.id+'" data-f="'+esc(r.file_path)+'">حذف</button>':'')+'</span></div>').join('')||'<p class="muted">لا نتائج</p>';
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{const{data,error}=await sb.storage.from('resources').createSignedUrl(b.dataset.p,60,{download:true});error?toast(error.message):location.href=data.signedUrl});
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=async()=>{await sb.storage.from('resources').remove([b.dataset.f]);await sb.from('resources').delete().eq('id',b.dataset.x);load()})};
+async function load(){const{data}=await sb.from('resources').select('*').order('created_at',{ascending:false});all=data||[];draw()}
+$('#q').oninput=draw;$('#cat').onchange=draw;load();
+$('#rform').onsubmit=async e=>{e.preventDefault();const f=$('#rf').files[0];
+if(f.type!=='application/pdf'||f.size>10*1048576)return toast('PDF فقط وبحد أقصى 10MB');
+const path=u.id+'/'+Date.now()+'.pdf',up=await sb.storage.from('resources').upload(path,f,{contentType:'application/pdf'});if(up.error)return toast(up.error.message);
+const{error}=await sb.from('resources').insert({title:$('#rt').value.trim(),course:$('#rc').value.trim(),category:$('#rk').value,file_path:path});
+if(error)return toast(error.message);e.target.reset();toast('تم الرفع ✓');load()}})()</script></body></html>
